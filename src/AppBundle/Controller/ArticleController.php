@@ -7,7 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as Response;
 
-class DefaultController extends Controller
+
+/**
+* @Route("/article")
+*/
+class ArticleController extends Controller
 {
     /**
      * @Route("/", name="homepage")
@@ -15,7 +19,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', ['message' => "Hello"]);
+        return $this->render('article/index.html.twig', array('message' => "Hello"));
     }
 
     /**
@@ -28,7 +32,7 @@ class DefaultController extends Controller
     public function showAction($id)
     {
         dump($id);
-        return $this->render('default/show.html.twig', ['id' => $id]);
+        return $this->render('article/show.html.twig', array('id' => $id));
     }
 
     /**
@@ -42,7 +46,6 @@ class DefaultController extends Controller
     {
         //return new Response("Hello", 500, ['X-my-header' => 'Youhouu j\' ai fait mon propre header']);
         //Mieux pour la lisibilité d'utiliser les constantes
-        return new Response("Hello", Response::HTTP_OK, ['X-my-header' => 'Youhouu j\' ai fait mon propre header']);
+        return new Response("Hello", Response::HTTP_OK, array('X-my-header' => 'Youhouu j\' ai fait mon propre header'));
     }
-
 }
