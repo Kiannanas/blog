@@ -6,15 +6,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as Response;
-
+use AppBundle\Entity\Article;
+use AppBundle\Form\ArticleType;
 
 /**
-* @Route("/article")
+* @Route("/article", name="article")
 */
 class ArticleController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="homepage_article")
      */
     public function indexAction(Request $request)
     {
@@ -37,15 +38,42 @@ class ArticleController extends Controller
 
     /**
     * @Route(
-    *    "/users",
-    *    name="users",
-    *    requirements={"id" : "\d+"},
-    *    defaults={"id" : 1})
+    *    "/add",
+    *    name="add_article")
     */
-    public function userAction()
+    public function addAction(Request $request)
     {
-        //return new Response("Hello", 500, ['X-my-header' => 'Youhouu j\' ai fait mon propre header']);
-        //Mieux pour la lisibilité d'utiliser les constantes
-        return new Response("Hello", Response::HTTP_OK, array('X-my-header' => 'Youhouu j\' ai fait mon propre header'));
+        //Construction du formulaire
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+
+        //on configure le bouton de soumission de formulaire dans add.html.twig
+        //car ça relève de l'affichage donc n'a rien à faire dans du php
+        //pour pouvoir le modifier dans le cas d'une modification d'article
+        // form->add('submit', SubmitType::class, array(
+        //     'label' => 'Créer l\'article',
+        //     'attr'  => array('class' => 'btn btn-default pull-right')
+        // ));
+
+        $form->handleRequest($request);
+
+        //Gestion de la soumission du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            //Si le formulaire est soumis et valide on redirige sur la visualisation de l'article
+            return $this->redirect(
+                $this->generateUrl(
+                    'show_article',
+                    array('id' => $article->getId())
+                )
+            );
+        }
+    
+        //Si le formulaire n'est pas valide on affiche à nouveau le formulaire
+        return $this->render('article/add.html.twig', array('form' => $form->createView()));
     }
+
 }

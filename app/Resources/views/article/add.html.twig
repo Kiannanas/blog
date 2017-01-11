@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ parent() }} | Ajouter un article
+{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('{{ asset('bundles/clean-blog/img/home-bg.jpg') }}')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>Ajouter un article</h1>
+                        <hr class="small">
+                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        {{ form_start(form, {'attr': {'class': 'form add-article'} }) }}
+    		{{ form_widget(form) }}
+    		<input type="submit" value="Créer l'article" class="btn btn-default pull-right" />
+		{{ form_end(form) }}
+    </div>
+{% endblock %}

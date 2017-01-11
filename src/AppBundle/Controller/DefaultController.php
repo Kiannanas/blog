@@ -15,20 +15,9 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', ['message' => "Hello"]);
-    }
-
-    /**
-    * @Route(
-    *    "/{id}",
-    *    name="show_article",
-    *    requirements={"id" : "\d+"},
-    *    defaults={"id" : 1})
-    */
-    public function showAction($id)
-    {
-        dump($id);
-        return $this->render('default/show.html.twig', ['id' => $id]);
+        //return $this->render('default/index.html.twig', ['message' => "Hello"]);
+        //Pour redirection via controller
+        return $this->redirectToRoute("homepage_article");
     }
 
     /**
