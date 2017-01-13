@@ -6,5 +6,5 @@ redirect_homepage:
   path: / # What the user type in the explorer
   defaults: 
     _controller: FrameworkBundle:Redirect:redirect
-    route: homepage_article
+    route: article_index
     permanent: true

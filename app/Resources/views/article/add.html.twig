@@ -4,28 +4,101 @@
 {{ parent() }} | Ajouter un article
 {% endblock %}
 
+{% if 'article_new'  == app.request.get('_route') %} 
+	{% set submitButton = "Créer l'article" %}
+	{% set title = "Créer un article" %}
+{% else %}
+	{% set submitButton = "Modifier l'article " %}
+	{% set title = 'Modifier l\'article "' ~ article.title ~ '"' %}
+{% endif %}
+
 {% block body %}
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('{{ asset('bundles/clean-blog/img/home-bg.jpg') }}')">
+    <header class="intro-header" style="background-image: url('{% if article is defined %} {% if article.headerImage %}{{ oldArticleImgPath }}{% endif %}{% else %}{{ asset('bundles/clean-blog/img/post-bg.jpg') }}{% endif %}')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1>Ajouter un article</h1>
+                        <h1>{{ title }}</h1>
                         <hr class="small">
-                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
-        {{ form_start(form, {'attr': {'class': 'form add-article'} }) }}
-    		{{ form_widget(form) }}
-    		<input type="submit" value="Créer l'article" class="btn btn-default pull-right" />
-		{{ form_end(form) }}
-    </div>
+    {{ parent() }}
+
+    <!-- Post Content -->
+	<article>
+    	<div class="container">
+    		<div class="row">
+
+		    	<h1>{{ title }}</h1>
+
+		        {{ form_start(form, {'attr': {'class': 'article addForm'} }) }}
+		        	<div class="row control-group">
+		        		<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.title) }}
+		    				{{ form_errors(form.title) }}
+		    				{{ form_widget(form.title) }}
+		        		</div>
+		    		</div>
+
+		    		<div class="row control-group">
+		    			<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.author) }}
+		    				{{ form_errors(form.author) }}
+		    				{{ form_widget(form.author) }}
+		        		</div>
+		    		</div>
+
+		    		<div class="row control-group">
+		    			<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.headerImage) }}
+		    				{{ form_errors(form.headerImage) }}
+		    				{{ form_widget(form.headerImage) }}
+		        		</div>
+		        	</div>
+
+		        	<div class="row control-group">
+		        		<div class="form-group col-xs-12 controls">
+		        			{% if 'article_update' == app.request.get('_route') %}
+		        				<label class="control-label" for="old_article_headerImage">Image d'en-tête actuelle : </label>
+		        				<img id="old_article_headerImage" src="{{ oldArticleImgPath }}" width="200" />
+		        			{% endif %}
+		        		</div>
+		        	</div>
+
+		    		<div class="row control-group">
+		    			<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.summary) }}
+		    				{{ form_errors(form.summary) }}
+		    				{{ form_widget(form.summary) }}
+		        		</div>
+		    		</div>
+
+		    		<div class="row control-group">
+		    			<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.content) }}
+		    				{{ form_errors(form.content) }}
+		    				{{ form_widget(form.content) }}
+		        		</div>
+		    		</div>
+
+		    		<div class="row control-group">
+		    			<div class="form-group col-xs-12 controls">
+		        			{{ form_label(form.publishedAt) }}
+		    				{{ form_errors(form.publishedAt) }}
+		    				{{ form_widget(form.publishedAt) }}
+		        		</div>
+		    		</div>
+
+		    		<input type="submit" value={{ submitButton }} class="btn btn-success pull-right" />
+
+				{{ form_end(form) }}
+    		</div>
+    	</div>
+    </article>
 {% endblock %}

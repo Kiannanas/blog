@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -18,27 +19,32 @@ class Article
 	private $id;
 
 	/**
-     * @ORM\Column
+     * @ORM\Column(nullable=true)
+     * @Assert\Image()
      */
 	private $headerImage;
 
 	/**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Un article doit avoir un résumé.")
      */
 	private $summary;
 
 	/**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Un article doit avoir un titre.")
      */
 	private $title;
 
 	/**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "Un article doit avoir un contenu")
      */
 	private $content;
 
 	/**
      * @ORM\Column
+     * @Assert\NotBlank()
      */
 	private $author;
 
@@ -47,10 +53,21 @@ class Article
      */
 	private $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
 	/**
      * @ORM\Column(type="datetime")
      */
 	private $publishedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime;
+    }
 
 
     /**
@@ -205,6 +222,30 @@ class Article
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Article
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**
