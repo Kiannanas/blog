@@ -1,11 +1,20 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/security.html
 security:
+    encoders:
+        # Si on utilise la classe User par défaut de Symfony
+        Symfony\Component\Security\Core\User\User: bcrypt
 
-    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+
     providers:
-        in_memory:
-            memory: ~
+        in_memory:   # Name of the provider (you can put whatever you want)
+            memory:  # Type of provider (something that Symfony knows)
+                # Si on utilise les users paramétrés directement dans ce fichier security.yml
+                users:
+                    annaik:
+                        password: $2y$13$DPpWe1Ojs5zu8bDVZLfUyubHyOMOjy/d7g/mxwTrrCat4es5zxf4a  #my_password
+                        roles: 'ROLE_ADMIN'
+                    nico:
+                        password: $2y$13$7.sNlnXDAA3osK057clq.er/jNdPlqZDnFpEjW0/J5wuxWU.DgoEK  #my_password
+                        roles: 'ROLE_USER'
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,12 +22,31 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login:
+            pattern: /login
+            security: false
+
+        homepage:
+            pattern: ^/article/$
+            anonymous: ~
+
+        secured_area:
+            pattern: ^/ # For every request having a uri beginning with /article/admin, the firewall is activated.
+            provider: in_memory
+            form_login:   # The way the user is going to be asked to be authenticated
+                login_path: /login  # The user will be redirected toward this uri, which is the login form, where the user needs to be authenticated.
+                check_path: /article/admin/auth_check   # The uri where the login form is posted.
+                username_parameter: username  # The name of the form field used for the username
+                password_parameter: password # The name of the form field used for the password
+                always_use_default_target_path: true  # We ask Symfony to always redirect the user toward the uri indicated in the parameter "default_target_path"
+                default_target_path:  /  # The uri where the user is going to be redirected if the authentication was a success
+            logout:
+                path: /article/admin/logout # The uri to unlog a user.
+                target: / # The uri toward the user is redirected after the unlog.
+
         main:
             anonymous: ~
-            # activate different ways to authenticate
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    access_control:
+         - { path: ^/article/admin, roles: ROLE_ADMIN }
+         - { path: ^/article/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

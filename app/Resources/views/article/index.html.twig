@@ -14,7 +14,6 @@
                     <div class="site-heading">
                         <h1>Liste des articles</h1>
                         <hr class="small">
-                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
                     </div>
                 </div>
             </div>
@@ -36,7 +35,7 @@
                             {{ article.title|title }}
                         </h2>
                         <h3 class="post-subtitle">
-                            {{ article.summary|title }}
+                            {{ article.summary }}
                         </h3>
                     </a>
                     <p class="post-meta">Publié par <a href="#">{{ article.author }}</a> le {{ article.publishedAt|date("d/m/Y") }}</p>

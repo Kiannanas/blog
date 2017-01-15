@@ -51,12 +51,22 @@
                     <li>
                         <a href="{{ path('article_index')}}">Accueil</a>
                     </li>
-                    <li>
-                        <a href="{{ path('article_new')}}">Créer un article</a>
-                    </li>
+
                     <li>
                         <a href="contact.html">Contact</a>
                     </li>
+                    {% if app.user %}
+                        <li>
+                            <a href="{{ path('article_new')}}">Créer un article</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('logout')}}">Se déconnecter</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('login')}}">S'identifier</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
